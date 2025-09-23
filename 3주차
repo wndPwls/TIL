@@ -1,0 +1,35 @@
+Dart 이해하기
+
+-자바스크립트를 대체하기 위해 개발
+-플러터와 함께 급성장
+-구글 적극 지원, 미래 전망 밝은 언어
+
+
+DartPad 사용(https://dartpad.dev/)
+
+void main(){
+  print('Hello, Dart!');
+}
+
+*변수 선언
+
+var name = '주예진'; //타입 추론 사용
+String name = '주예진; //명시적 타입 선언 
+
+*숫자 타입
+
+int age = 32;
+double height = 182.5;
+
+// 형변환
+int a = age.toInt();
+double b = age.toDouble();
+
+*List(리스트)
+
+//가변 리스트
+var numbers = [1, 2, 3];
+numbers.add(4);
+
+//정적 리스트
+var fixedList = List<int>.filled(3, 0);

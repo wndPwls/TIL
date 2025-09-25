@@ -1,0 +1,115 @@
+List (리스트)
+
+// 가변 리스트
+var numbers = [1, 2, 3];
+numbers.add(4);
+
+// 정적 리스트
+var fixedList = List<int>.filled(3, 0);
+
+Set (중복 불가)
+
+var fruits = <String>{'사과', '바나나', '사과'};
+print(fruits); // {사과, 바나나}
+
+Map (키-값)
+
+var person = {
+'name': '개발하는남자',
+'age': 37,
+};
+
+
+연산자
+
+산술 연산자: +, -, *, /, %
+비교 연산자: >, <, >=, ==
+조건 연산자:
+// null 병합 연산자
+String? name = null;
+print(name ?? 'Unknown'); // Unknown
+
+// 삼항 연산자
+int age = 20;
+String status = age >= 18 ? '성인' : '미성년자';
+
+
+조건문
+
+if(age >= 18){
+  print('성인');
+}else{
+  print('미성년자');
+}
+
+// switch문
+var result = switch(color){
+  Color.red => '빨강',
+  Color.blue => '파랑',
+  - => '기타'
+};
+
+
+반복문
+
+for(int i = 0; i < 5; i++){
+  print(i);
+}
+// for-in문
+for(var item in list){
+  print(item);
+}
+// while문
+while(condition){
+}
+
+
+함수
+
+int add(int a, int b){
+  return a + b;
+}
+
+void greet(String name){
+  print('Hello, $name!');
+}
+
+매개변수
+
+String fullName(String first, String last){
+  return '$first $last';
+}
+
+String createUser({required String name, int? age}) {
+return 'User: $name, Age: ${age ?? 'Unknown'}';
+}
+
+클래스 정의
+
+class Person {
+  final String name;
+  final int age;
+
+  Person({required this.name, required this.age});
+  void introduce() {
+    print('안녕하세요, 저는 $name이고 $age살입니다.');
+  }
+}
+
+상속
+
+class Student extends Person{
+  final String school;  
+
+  Student({
+    required super.name,
+    required super.age,
+    required this.school,
+});
+
+@override
+void introduce(){
+  super.introduce();
+  print('$school에 다닙니다.');
+  }
+}

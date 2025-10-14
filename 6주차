@@ -1,0 +1,29 @@
+  print('#     #');
+  print(' #   #');
+  print('  # #');
+  print('   #');
+  print('  # #');
+  print(' #   #');
+  print('#     #');
+
+
+
+
+   var n = 5;
+  printV(n);
+}
+
+void printV(int n) {
+  for (var y = 0; y < n; y++) {
+    var line = '';
+    var width = n * 2 - 1;
+    for (var x = 0; x < width * n; x++) {
+      var condition = x % width == y || width - 1 - (x % width) == y;
+      if (condition) {
+        line += '#';
+      } else {
+        line += '.';
+      }
+    }
+    print(line);
+  }

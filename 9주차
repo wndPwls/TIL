@@ -1,0 +1,110 @@
+Widget createS2(){
+  return Row(
+    mainAxisAlignment: MainAxisAlignment.center,
+    children: [
+      Container(color: Colors.red, width: 100, height: 40),
+      const SizedBox(width: 10, child: Text('|')),
+      Container(color: Colors.blue, width: 100, height: 40),
+      const SizedBox(width: 10, child: Text('|')),
+      Container(color: Colors.blue, width: 100, height: 40),
+    ],
+  );
+}
+
+Widget createS3(){
+  return ListView(
+    scrollDirection: Axis.horizontal,
+    children: List.generate(10, 
+    (index) => Container(
+      width: 100,
+      height: 100,
+      margin: const EdgeInsets.all(5),
+      color: Colors.red.withAlpha((index+1)* 25),
+      child: Center(
+        child: Text(
+          'Item ${index + 1}',
+          style: const TextStyle(color: Colors.white),
+        ),
+      ),
+    ),
+    ),
+  );
+}
+
+Widget createS4(){
+  return PageView(
+    children: [
+      Container(
+        color: Colors.red,
+        child: const Center(
+          child: Text(
+            "1",
+            style: TextStyle(fontSize: 50, color: Colors.white),
+          ),
+        ),
+      ),
+      Container(
+        color: Colors.blue,
+        child: const Center(
+          child: Text(
+            "2",
+            style: TextStyle(fontSize: 50, color: Colors.white),
+          ),
+        ),
+      ),
+      Container(
+        color: Colors.yellow,
+        child: const Center(
+          child: Text(
+            "3",
+            style: TextStyle(fontSize: 50, color: Colors.white),
+          ),
+        ),
+      ),
+    ],
+  );
+}
+
+void initState(){
+  super.initState();
+  _tabController = TabController(length: 3, vsync: 5)
+}
+
+TabBar(
+  controller: _tabController,
+  tabs: const[
+    Text('메뉴1'),
+    Text('메뉴2'),
+    Text('메뉴3'),
+  ],
+);
+
+Widget createS5(){
+  return Column(
+    children: [
+      TabBar(
+        controller: _tabController,
+        tabs: const [
+          Tab(text: '메뉴1'),
+          Tab(text: '메뉴2'),
+          Tab(text: '메뉴3'),
+        ],
+      ),
+      Expanded(child: TabBarView(controller: _tabController,
+      children: [
+        Container(
+          color: Colors.blue,
+          child: Center(child: Text('메뉴1 페이지')),
+        ),
+        Container(
+          color: Colors.green,
+          child: Center(child: Text('메뉴2 페이지')),
+        ),
+        Container(
+          color: Colors.red,
+          child: Center(child: Text('메뉴3 페이지')),
+        ),
+      ],)),
+    ],
+  );
+}

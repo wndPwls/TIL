@@ -1,0 +1,184 @@
+// 앱 root 레이아웃 구성
+
+import 'package:bamtol_market/src/common/components/app_font.dart';
+import 'package:bamtol_market/src/common/controller/bottom_nav_controller.dart';
+import 'package:bamtol_market/src/home/page/home_page.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
+
+class Root extends GetView<BottomNavController> {
+  const Root({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: TabBarView(
+        physics: const NeverScrollableScrollPhysics(),
+        controller: controller.tabController,
+        children: const [
+          HomePage(),
+          Center(child: AppFont('동네생활')),
+          Center(child: AppFont('내 근처')),
+          Center(child: AppFont('채팅')),
+          Center(child: AppFont('나의 밤톨')),
+        ],
+      ),
+      bottomNavigationBar: Obx(
+        () => BottomNavigationBar(
+          currentIndex: controller.menuIndex.value,
+          type: BottomNavigationBarType.fixed,
+          backgroundColor: const Color(0xff212123),
+          selectedItemColor: const Color(0xffffffff),
+          unselectedItemColor: const Color(0xffffffff),
+          selectedFontSize: 11.0,
+          unselectedFontSize: 11.0,
+          onTap: controller.changeBottomNav,
+          items: [
+            BottomNavigationBarItem(
+              label: '홈',
+              icon: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: SvgPicture.asset('assets/svg/icons/home-off.svg'),
+              ),
+              activeIcon: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: SvgPicture.asset('assets/svg/icons/home-on.svg'),
+              ),
+            ),
+            BottomNavigationBarItem(
+              label: '동네생활',
+              icon: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: SvgPicture.asset(
+                  'assets/svg/icons/arround-life-off.svg',
+                ),
+              ),
+              activeIcon: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: SvgPicture.asset('assets/svg/icons/arround-life-on.svg'),
+              ),
+            ),
+            BottomNavigationBarItem(
+              label: '내 근처',
+              icon: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: SvgPicture.asset('assets/svg/icons/near-off.svg'),
+              ),
+              activeIcon: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: SvgPicture.asset('assets/svg/icons/near-on.svg'),
+              ),
+            ),
+            BottomNavigationBarItem(
+              label: '채팅',
+              icon: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: SvgPicture.asset('assets/svg/icons/chat-off.svg'),
+              ),
+              activeIcon: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: SvgPicture.asset('assets/svg/icons/chat-on.svg'),
+              ),
+            ),
+            BottomNavigationBarItem(
+              label: '나의 밤톨',
+              icon: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: SvgPicture.asset('assets/svg/icons/my-off.svg'),
+              ),
+              activeIcon: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: SvgPicture.asset('assets/svg/icons/my-on.svg'),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+
+class BottomNavController extends GetxController
+    with GetTickerProviderStateMixin {
+  late TabController tabController;
+  RxInt menuIndex = 0.obs;
+
+  @override
+  void onInit() {
+    super.onInit();
+    tabController = TabController(length: 5, vsync: this);
+  }
+
+  void changeBottomNav(int index) {
+    menuIndex(index);
+    tabController.animateTo(index);
+  }
+}
+
+// 메인 수정
+import 'package:bamtol_market/src/app.dart';
+import 'package:bamtol_market/src/common/controller/authentication_controller.dart';
+import 'package:bamtol_market/src/common/controller/bottom_nav_controller.dart';
+import 'package:bamtol_market/src/common/controller/data_load_controller.dart';
+import 'package:bamtol_market/src/home/page/home_page.dart';
+import 'package:bamtol_market/src/root.dart';
+import 'package:bamtol_market/src/splash/controller/splash_controller.dart';
+import 'package:bamtol_market/src/user/login/controller/login_controller.dart';
+import 'package:bamtol_market/src/user/login/page/login_page.dart';
+import 'package:bamtol_market/src/user/repository/user_repository.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import 'src/splash/page/splash_page.dart';
+
+late SharedPreferences prefs;
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  prefs = await SharedPreferences.getInstance();
+  runApp(const MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  // This widget is the root of your application.
+  @override
+  Widget build(BuildContext context) {
+    return GetMaterialApp(
+      title: '당근마켓 클론코딩',
+      initialRoute: '/splash',
+      theme: ThemeData(
+        appBarTheme: const AppBarTheme(
+          elevation: 0,
+          color: Color(0xff212123),
+          titleTextStyle: TextStyle(color: Colors.white),
+        ),
+        scaffoldBackgroundColor: const Color(0xff212123),
+      ),
+      initialBinding: BindingsBuilder(() {
+        Get.put(SplashController());
+        Get.put(DataLoadController());
+        Get.put(UserRepository());
+        Get.put(AuthenticationController(Get.find<UserRepository>()));
+        Get.put(BottomNavController());
+      }),
+      getPages: [
+        GetPage(name: '/splash', page: () => const SplashPage()),
+        GetPage(name: '/', page: () => const App()),
+        GetPage(name: '/home', page: () => const Root()),
+        GetPage(
+          name: '/login',
+          page: () => const LoginPage(),
+          binding: BindingsBuilder(() {
+            Get.put(LoginController());
+          }),
+        ),
+      ],
+    );
+  }
+}

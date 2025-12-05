@@ -1,0 +1,158 @@
+// 밤톨 마켓 파이어베이스 제외 최초 앱 화면 퍼블리싱
+// Main.dart에서 파이어베이스 부분을 제외하고 작동되도록 코드를 수정해달라고 요청
+
+import 'package:bamtol_market/src/app.dart';
+import 'package:get/get.dart';
+import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+late SharedPreferences prefs;
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  prefs = await SharedPreferences.getInstance();
+  runApp(const MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  // This widget is the root of your application.
+  @override
+  Widget build(BuildContext context) {
+    return GetMaterialApp(
+      title: '당근마켓 클론코딩',
+      initialRoute: '/',
+      theme: ThemeData(
+        appBarTheme: const AppBarTheme(
+          elevation: 0,
+          color: Color(0xff212123),
+          titleTextStyle: TextStyle(color: Colors.white),
+        ),
+        scaffoldBackgroundColor: const Color(0xff212123),
+      ),
+      getPages: [GetPage(name: '/', page: () => const App())],
+    );
+  }
+}
+
+// init_start_page에 로고 및 문구, 앱 소개 문구, 시작하기 버튼 배치
+
+import 'package:bamtol_market/src/common/components/app_font.dart';
+import 'package:bamtol_market/src/common/components/btn.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+
+class InitStartPage extends StatelessWidget {
+  final Function() onStart;
+  const InitStartPage({super.key, required this.onStart});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            SizedBox(
+              width: 99,
+              height: 116,
+              child: Image.asset('assets/images/logo_simbol.png'),
+            ),
+            const SizedBox(height: 40),
+            const AppFont('당신 근처의 밤톨마켓', fontWeight: FontWeight.bold, size: 20),
+            const SizedBox(height: 15),
+            AppFont(
+              '중고 거래부터 동네 정보까지, \n지금 내 동네를 선택하고 시작해보세요!',
+              align: TextAlign.center,
+              size: 18,
+              color: Colors.white.withOpacity(0.6),
+            ),
+          ],
+        ),
+      ),
+      bottomNavigationBar: Padding(
+        padding: EdgeInsets.only(
+          left: 25,
+          right: 25,
+          bottom: 25 + Get.mediaQuery.padding.bottom,
+        ),
+        child: Btn(
+          onTap: onStart,
+          child: const AppFont(
+            '시작하기',
+            align: TextAlign.center,
+            size: 18,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+
+// Text 위젯 래핑하여 공동 Text 위젯 만들기
+// app_font파일 생성
+
+import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+
+class AppFont extends StatelessWidget {
+  final String text;
+  final Color? color;
+  final double? size;
+  final TextAlign? align;
+  final FontWeight? fontWeight;
+
+  const AppFont(
+    this.text, {
+    super.key,
+    this.color = Colors.white,
+    this.align,
+    this.size,
+    this.fontWeight,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      text,
+      textAlign: align,
+      style: GoogleFonts.notoSans(
+        color: color,
+        fontSize: size,
+        fontWeight: fontWeight,
+      ),
+    );
+  }
+}
+
+// btn 파일 
+
+import 'package:flutter/material.dart';
+
+class Btn extends StatelessWidget {
+  final Widget child;
+  final Function() onTap;
+  const Btn({super.key, required this.child, required this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(7),
+        child: Container(
+          padding: const EdgeInsets.symmetric(vertical: 15),
+          color: const Color(0xffED7738),
+          child: child,
+        ),
+      ),
+    );
+  }
+}
+
+
+
+
+
